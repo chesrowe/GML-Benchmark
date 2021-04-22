@@ -1,0 +1,1 @@
+currentMethod = 0;
