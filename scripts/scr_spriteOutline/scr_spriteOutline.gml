@@ -1,6 +1,5 @@
 ///Scripts dealing with the outline shader
 
-
 /// @func sprite_outline_init()
 /// @desc Sets up all the vars needed for the sprite outlines
 

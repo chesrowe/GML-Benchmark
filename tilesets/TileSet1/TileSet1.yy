@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "spr_CaveAssets",
-    "path": "sprites/spr_CaveAssets/spr_CaveAssets.yy",
-  },
+  "spriteId": null,
   "tileWidth": 16,
   "tileHeight": 16,
   "tilexoff": 0,
