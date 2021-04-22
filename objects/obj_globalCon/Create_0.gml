@@ -30,6 +30,8 @@ calculateResult = function(_iterations){
 	currentResult[currentMethod] ++;
 }
 
+#region Test Methods
+
 powerOfTwo = function(){
 	holderOfValues = power(holderOfValues, 2); 
 }
@@ -77,12 +79,28 @@ truncRoundTest = function(){
 	holderOfValues = ~~(holderOfValues + 0.5);	
 }
 
+testArray = [];
+
+arrayWriteTest = function(){
+	testArray[0] = irandom(0xFFFF);	
+}
+
+testBuffer = buffer_create(100, buffer_grow, 2);
+
+bufferWriteTest = function(){
+	buffer_write(testBuffer, buffer_u16, irandom(0xFFFF));	
+}
+
+#endregion
+
 ////////////////////////////////////////////|
 ////Put the two methods to compare here!!!//|
 ////////////////////////////////////////////|
-methodToCalculate[0] = roundTest;         //|
-methodToCalculate[1] = truncRoundTest;    //|
+methodToCalculate[0] = bitShiftLeft;      //|
+methodToCalculate[1] = arrayWriteTest;    //|
 ////////////////////////////////////////////|
+
+#region Drawing methods
 
 findAverageOfAverages = function(_method){
 	var _numberOfValues = buffer_get_size(averageResultBuffer[_method]) / 2;	
@@ -130,6 +148,8 @@ drawResults = function(_x, _y, _method){
 		draw_text(_x + 450, _yOrg, string(percentDifference) + "% " + " faster");
 	}
 }
+
+#endregion
 
 
 
