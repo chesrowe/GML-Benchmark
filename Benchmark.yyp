@@ -5,7 +5,6 @@
     {"id":{"name":"scr_bezierCurves","path":"scripts/scr_bezierCurves/scr_bezierCurves.yy",},"order":2,},
     {"id":{"name":"random_range_repeatable","path":"scripts/random_range_repeatable/random_range_repeatable.yy",},"order":2,},
     {"id":{"name":"ac_tester","path":"animcurves/ac_tester/ac_tester.yy",},"order":0,},
-    {"id":{"name":"TileSet1","path":"tilesets/TileSet1/TileSet1.yy",},"order":0,},
     {"id":{"name":"shd_fog","path":"shaders/shd_fog/shd_fog.yy",},"order":0,},
     {"id":{"name":"random_repeatable","path":"scripts/random_repeatable/random_repeatable.yy",},"order":3,},
     {"id":{"name":"structs","path":"scripts/structs/structs.yy",},"order":6,},

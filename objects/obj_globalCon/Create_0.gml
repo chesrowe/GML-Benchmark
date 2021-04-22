@@ -9,9 +9,9 @@ resultArray = array_create(2, -1);
 resultArray[0] = array_create(100, -1);
 resultArray[1] = array_create(100, -1);
 currentResult[0] = 0;
-currentResult[2] = 0;
+currentResult[1] = 0;
 holderOfValues = 5.6;
-iterationsPerCalculation = 0xFFF;
+iterationsPerCalculation = 0xFFFF;
 framesOfIteration = 64;
 currentFrame = 0;
 startCalculations = false;
@@ -77,8 +77,34 @@ truncRoundTest = function(){
 	holderOfValues = ~~(holderOfValues + 0.5);	
 }
 
-methodToCalculate[0] = roundTest;
-methodToCalculate[1] = truncRoundTest;
+////////////////////////////////////////////|
+////Put the two methods to compare here!!!//|
+////////////////////////////////////////////|
+methodToCalculate[0] = roundTest;         //|
+methodToCalculate[1] = truncRoundTest;    //|
+////////////////////////////////////////////|
+
+findAverageOfAverages = function(_method){
+	var _numberOfValues = buffer_get_size(averageResultBuffer[_method]) / 2;	
+	
+	var _averageTotal = 0;
+	var _numberOfAveragesinBuffer = 0;
+	
+	repeat(_numberOfValues){
+		var _average = buffer_read(averageResultBuffer[_method], buffer_f16);
+		
+		if (_average != 0){
+			_averageTotal += _average;
+			_numberOfAveragesinBuffer ++;
+		}
+	}
+	
+	return _averageTotal / _numberOfAveragesinBuffer;
+}
+
+findAverage = function(_method){
+	var _numberOfValues = buffer_get_size(averageResultBuffer[_method]) / 2;		
+}
 
 drawResults = function(_x, _y, _method){
 	var _yOrg = _y;
@@ -94,19 +120,15 @@ drawResults = function(_x, _y, _method){
 		}
 	}
 	
-	var _averageTotal = 0;
-	var _numberOfAveragesinBuffer = 0;
+	var _averageOfAverages = findAverageOfAverages(_method);
+	var _otherMethodAverageOfAverages = findAverageOfAverages(!_method);
 	
-	repeat(_numberOfValues){
-		var _average = buffer_read(averageResultBuffer[_method], buffer_f16);
-		
-		if (_average != 0){
-			_averageTotal += _average;
-			_numberOfAveragesinBuffer ++;
-		}
+	draw_text(_x + 190, _yOrg, "Average of averages: " + string(_averageOfAverages) + "ms");	
+	
+	if (_averageOfAverages < _otherMethodAverageOfAverages){
+		var percentDifference = 100 - ((_averageOfAverages / _otherMethodAverageOfAverages) * 100);	
+		draw_text(_x + 450, _yOrg, string(percentDifference) + "% " + " faster");
 	}
-	
-	draw_text(_x + 190, _yOrg, "Average of averages: " + string(_averageTotal / _numberOfAveragesinBuffer) + "ms");	
 }
 
 
