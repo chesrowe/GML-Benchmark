@@ -85,20 +85,125 @@ arrayWriteTest = function(){
 	testArray[0] = irandom(0xFFFF);	
 }
 
-testBuffer = buffer_create(100, buffer_grow, 2);
+testBuffer = buffer_create(0xFFFF, buffer_fast, 1);
 
 bufferWriteTest = function(){
-	buffer_write(testBuffer, buffer_u16, irandom(0xFFFF));	
+	buffer_write(testBuffer, buffer_u8, irandom(0xFF));	
+}
+
+testGrid = ds_grid_create(0xFFF, 0xFFF);
+
+dsGridTest = function(){
+	var width = ds_grid_width(testGrid);
+	var height = ds_grid_height(testGrid);
+	
+	for (i = 0; i < width; i++){
+		testGrid[# i, irandom(height - 1)] = irandom(0xFFFF);	
+	}
+}
+
+testArray = array_create(0xFFF);
+
+for (i = 0; i < array_length(testArray); i++){
+	testArray[i] = array_create(0xFFF);	
+}
+
+twoDArrayTest = function(){
+	var width = array_length(testArray);
+
+	for (i = 0; i < width; i++){
+		testArray[i][irandom(width - 1)] = irandom(0xFFFF);	
+	}
+}
+
+bitSum = function(val1, val2){	
+	var _x = val1;
+	var _y = val2;
+	
+	var _carry = _x & _y;
+	_x = _x ^ _y;
+	_y = _carry << 1;
+	
+	if (_y == 0){
+		return _x;
+	}else{
+		return bitSum(_x, _y);	
+	}
+}
+
+bitSumMethod = function(){
+	var _val = bitSum(5, 5);		
+}
+
+regularSum = function(){
+	var _val =  5 + 5;	
+}
+
+
+valueSwapNoTempVar = function(){
+	var _val1 = 10;
+	var _val2 = 5;
+	
+	_val1 = _val1 ^ _val2;
+	_val2 = _val1 ^ _val2;
+	_val1 = _val1 ^ _val2;
+}
+
+valueSwapWithTempVar = function(){
+	var _val1 = 10;
+	var _val2 = 5;
+	var _temp = 0;
+	
+	_temp = _val1;
+	_val1 = _val2;
+	_val2 = _temp;
+}
+
+var _value = 0xF;
+var _isBitSet = (_value & (0x1 << 1)) != 0;
+var _setBit = (_value | (0x1 << 4));
+var _clearBit = (_value & ~(0x1 << 1));
+
+checkBit = function(value, bitNum){
+	return (value & (1 << (bitNum))) != 0;		
+}
+
+setBit = function(value, bitNum){
+	return (value | (1 << (bitNum)));
+}
+
+clearBit = function(value, bitNum){
+	return (value & ~(1 << (bitNum)));	
+}
+
+toggleBit = function(value, bitNum){
+	return (value ^ (1 << (bitNum)));
+}
+
+minOfValues = function(val1, val2){
+	return val1 ^ ((val2 ^ val1) & -(val1 < val2));	
+}
+
+minOfValuesMethod = function(){
+	var _val1 = 5;
+	var _val2 = 10;
+	var _min = minOfValues(_val1, _val2);	
+}
+
+minRegular = function(){
+	var _val1 = 5;
+	var _val2 = 10;
+	var _min = 	_val1 < _val2 ? _val1 : _val2;	
 }
 
 #endregion
 
-////////////////////////////////////////////|
-////Put the two methods to compare here!!!//|
-////////////////////////////////////////////|
-methodToCalculate[0] = bitShiftLeft;      //|
-methodToCalculate[1] = arrayWriteTest;    //|
-////////////////////////////////////////////|
+//----------------------------------------------//
+//--Put the two methods to compare here!!!------//
+//----------------------------------------------//
+	methodToCalculate[0] = minOfValuesMethod;     
+	methodToCalculate[1] = minRegular;    
+//----------------------------------------------//
 
 #region Drawing methods
 
