@@ -20,4 +20,5 @@ if (currentFrame < framesOfIteration){
 	holderOfValues = irandom(0xFF);
 	startCalculations = false;
 	currentFrame = 0;
+	currentMethod = !currentMethod;
 }

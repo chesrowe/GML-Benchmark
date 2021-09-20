@@ -11,7 +11,7 @@ resultArray[1] = array_create(100, -1);
 currentResult[0] = 0;
 currentResult[1] = 0;
 holderOfValues = 5.6;
-iterationsPerCalculation = 0xFFFF;
+iterationsPerCalculation = 10000;
 framesOfIteration = 64;
 currentFrame = 0;
 startCalculations = false;
@@ -140,7 +140,7 @@ regularSum = function(){
 }
 
 
-valueSwapNoTempVar = function(){
+valueSwapNoTempVar = function(){ //Slower that the more readable way
 	var _val1 = 10;
 	var _val2 = 5;
 	
@@ -181,7 +181,7 @@ toggleBit = function(value, bitNum){
 }
 
 minOfValues = function(val1, val2){
-	return val1 ^ ((val2 ^ val1) & -(val1 < val2));	
+	return val1 ^ ((val2 ^ val1) & -(val1 < val2));	//Slower that the more readable way
 }
 
 minOfValuesMethod = function(){
@@ -196,13 +196,81 @@ minRegular = function(){
 	var _min = 	_val1 < _val2 ? _val1 : _val2;	
 }
 
+getSetBitCountDC = function(val){ //Paralell divide and conquer. Wipes the floor with other bit counting solutions
+	var _v = val;
+	
+	// Create masks 
+	var m5 = ~((-1) << 32);		// 0(32)1(32)
+	var m4 = m5 ^ (m5 << 16);	// 0(16)1(16) - 2 times 
+	var m3 = m4 ^ (m4 << 8);	// 0(8) 1(8)  - 4 times
+	var m2 = m3 ^ (m3 << 4);	// 0(4) 1(4)  - 8 times
+	var m1 = m2 ^ (m2 << 2);	// 0(2) 1(2)  - 16 times
+	var m0 = m1 ^ (m1 << 1);	// 01         - 32 times
+	
+	//Pop count
+	_v = ((_v >> 1) & m0) + (_v & m0);
+	_v = ((_v >> 2) & m1) + (_v & m1);
+	_v = ((_v >> 4) + _v) & m2;
+	_v = ((_v >> 8) + _v) & m3;
+	_v = ((_v >> 16) + _v) & m4;
+	_v = ((_v >> 32) + _v) & m5;
+	
+	return _v;
+} 
+
+getSetBitCount = function(val){
+	for (r = 0; val != 0; r++){
+		val = val & (val - 1);	
+	}
+	
+	return r;
+}
+
+getSetBitsDCMethod = function(){
+	var _bits = getSetBitCountDC(0x0);
+}
+
+getSetBitsLoopMethod = function(){
+	var _bits = getSetBitCount(0x3);
+}
+
+
+// The performance difference here non-existant with testing flipping back and forth
+forLoopDecTest = function(){
+	for (i = 20; i > 0; i--){
+		var _val = 1234;	
+	}
+}
+
+forLoopIncTest = function(){
+	for (i = 0; i < 20; i++){
+		var _val = 1234;	
+	}
+}
+
+//Layer id fetching test
+layerId = layer_get_id("Instances");
+
+layerTestId = function(){
+	var _test = instance_create_layer(0, 0, layerId, obj_test);
+	instance_destroy(_test);
+}
+
+layerTestString = function(){
+	var _test = instance_create_layer(0, 0, layer_get_id("Instances"), obj_test);
+	instance_destroy(_test);		
+}
+
+
+//print(string(getSetBitCount(3)));
+
 #endregion
 
 //----------------------------------------------//
 //--Put the two methods to compare here!!!------//
 //----------------------------------------------//
-	methodToCalculate[0] = minOfValuesMethod;     
-	methodToCalculate[1] = minRegular;    
+	methodToCalculate[0] = layerTestId;     
+	methodToCalculate[1] = layerTestString;    
 //----------------------------------------------//
 
 #region Drawing methods
